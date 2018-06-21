@@ -1,0 +1,584 @@
+[
+  {
+    "id": "24028488-8b11-4a2f-b224-a8a1399ebf51",
+    "name": "420",
+    "iconName": "420",
+    "pyNumber": 1111
+  },
+  {
+    "id": "5d849ebc-4b3e-42f5-bcca-523c6708ea56",
+    "name": "2000",
+    "iconName": "2000",
+    "pyNumber": 1109
+  },
+  {
+    "id": "f0334455-aa66-41e1-8dfb-66bbef6f9eeb",
+    "name": "29ER",
+    "iconName": "29er",
+    "pyNumber": 912
+  },
+  {
+    "id": "cb7baf8f-ecc4-4574-88b5-0ab27ab0d6bc",
+    "name": "49ER",
+    "iconName": "49er",
+    "pyNumber": 697
+  },
+  {
+    "id": "0536b4f1-2951-478a-ae96-2ee67e60d23c",
+    "name": "505",
+    "iconName": "505",
+    "pyNumber": 903
+  },
+  {
+    "id": "f1f442d3-186e-4fc3-b5d9-584211052a89",
+    "name": "ALBACORE",
+    "iconName": "albacore",
+    "pyNumber": 1038
+  },
+  {
+    "id": "caf27f41-d94c-4fea-9097-fd9d76b93843",
+    "name": "ALTO",
+    "iconName": "alto",
+    "pyNumber": 920
+  },
+  {
+    "id": "e3274b33-1282-442c-9b24-d35276cf8d9a",
+    "name": "BLAZE",
+    "iconName": "blaze",
+    "pyNumber": 1027
+  },
+  {
+    "id": "8d22d8fc-677b-46d8-a808-1bda929e70fa",
+    "name": "BRITISH MOTH",
+    "iconName": "moth",
+    "pyNumber": 1155
+  },
+  {
+    "id": "f3d0274d-3a85-4d60-8da3-86927b312a3e",
+    "name": "BYTE CII",
+    "iconName": "bytecii",
+    "pyNumber": 1144
+  },
+  {
+    "id": "d65f0815-3e29-47ac-a15c-930f284d4c28",
+    "name": "COMET",
+    "iconName": "comet",
+    "pyNumber": 1205
+  },
+  {
+    "id": "3f2a9a23-6a87-4014-8427-4099d49e653f",
+    "name": "COMET TRIO",
+    "iconName": "comettrio",
+    "pyNumber": 1097
+  },
+  {
+    "id": "4cfd6e84-ad0f-41d0-90fd-250926d0f2d7",
+    "name": "CONTENDER",
+    "iconName": "contender",
+    "pyNumber": 969
+  },
+  {
+    "id": "6b778ed1-4170-4b31-ba22-b5b3a5941ad3",
+    "name": "DEVOTI D-ONE",
+    "iconName": "devotidone",
+    "pyNumber": 948
+  },
+  {
+    "id": "e5dac02e-b025-4f94-ac11-848ea119f2e0",
+    "name": "DEVOTI D-ZERO",
+    "iconName": "devotidzero",
+    "pyNumber": 1029
+  },
+  {
+    "id": "e32c968b-083d-47bc-ab79-3fb5610db430",
+    "name": "ENTERPRISE",
+    "iconName": "enterprise",
+    "pyNumber": 1116
+  },
+  {
+    "id": "76af40d5-4a32-4789-a60f-d9ad5eee8873",
+    "name": "EUROPE",
+    "iconName": "europe",
+    "pyNumber": 1145
+  },
+  {
+    "id": "78fb2074-aee8-4bfd-a5b5-76e47e68466f",
+    "name": "FINN",
+    "iconName": "finn",
+    "pyNumber": 1051
+  },
+  {
+    "id": "fd763f05-5195-4b92-aaf0-9824eaa5ea89",
+    "name": "FIREBALL",
+    "iconName": "fireball",
+    "pyNumber": 953
+  },
+  {
+    "id": "5526d4bb-a616-4d7b-a34e-47a022b5b1ad",
+    "name": "FIREFLY",
+    "iconName": "firefly",
+    "pyNumber": 1165
+  },
+  {
+    "id": "33a6929a-9a07-4a80-8b37-681a3926e59c",
+    "name": "GP14",
+    "iconName": "gp14",
+    "pyNumber": 1133
+  },
+  {
+    "id": "934c31d1-eda6-4ed5-9cbc-a08a3cbd9324",
+    "name": "GRADUATE",
+    "iconName": "graduate",
+    "pyNumber": 1129
+  },
+  {
+    "id": "3509db20-ae5a-425a-8090-35163d6b7512",
+    "name": "HORNET",
+    "iconName": "hornet",
+    "pyNumber": 958
+  },
+  {
+    "id": "725b60ab-a0c9-40ab-829a-dd2567025b5f",
+    "name": "KESTREL",
+    "iconName": "kestrel",
+    "pyNumber": 1038
+  },
+  {
+    "id": "1d3cd0c0-47d2-4c52-a166-d4febb196101",
+    "name": "LARK",
+    "iconName": "lark",
+    "pyNumber": 1070
+  },
+  {
+    "id": "e8433ca1-d11c-48ad-b726-469107308e06",
+    "name": "LASER",
+    "iconName": "laser",
+    "pyNumber": 1098
+  },
+  {
+    "id": "a002bc5f-c2a6-48e9-b1c3-7e6cf9d996c5",
+    "name": "LASER 4.7",
+    "iconName": "laser47",
+    "pyNumber": 1207
+  },
+  {
+    "id": "a34f5544-2026-491d-a1bf-945495ff6a2f",
+    "name": "LASER 4000/ 4000",
+    "iconName": "laser40004000",
+    "pyNumber": 917
+  },
+  {
+    "id": "cb1f73a0-a7fd-4bcf-b47e-28b136174908",
+    "name": "LASER EPS",
+    "iconName": "lasereps",
+    "pyNumber": 1030
+  },
+  {
+    "id": "b2c9e711-ef42-4bc4-b27f-58b787672e84",
+    "name": "LASER II",
+    "iconName": "laserii",
+    "pyNumber": 1075
+  },
+  {
+    "id": "54f4d77f-8d49-4ae0-8f12-efdcad769c9d",
+    "name": "LASER RADIAL",
+    "iconName": "laserradial",
+    "pyNumber": 1142
+  },
+  {
+    "id": "bb629028-2b88-4222-b0f4-dbbce41903db",
+    "name": "LIGHTNING 368",
+    "iconName": "lightning368",
+    "pyNumber": 1170
+  },
+  {
+    "id": "05441d44-3083-46de-880c-0d5a969949b3",
+    "name": "MERLIN-ROCKET",
+    "iconName": "merlinrocket",
+    "pyNumber": 980
+  },
+  {
+    "id": "3187e060-206d-4eb3-a4a9-e1be021f4b43",
+    "name": "MIRACLE",
+    "iconName": "miracle",
+    "pyNumber": 1200
+  },
+  {
+    "id": "203225ea-1c4d-4b54-9a00-d40529838d09",
+    "name": "MIRROR",
+    "iconName": "mirror",
+    "pyNumber": 1390
+  },
+  {
+    "id": "fa2b3e80-96cb-439f-b748-449bab03fd0f",
+    "name": "MIRROR",
+    "iconName": "mirror",
+    "pyNumber": 1380
+  },
+  {
+    "id": "625eaf30-e913-4ebd-bb7d-559d7b02ee37",
+    "name": "MUSTO SKIFF",
+    "iconName": "mustoskiff",
+    "pyNumber": 849
+  },
+  {
+    "id": "a48c5e5b-cc5d-4367-9783-f916ed2ecf86",
+    "name": "NATIONAL 12",
+    "iconName": "national12",
+    "pyNumber": 1064
+  },
+  {
+    "id": "af8159c7-7767-44a5-ba08-2e8a75cca876",
+    "name": "OK",
+    "iconName": "ok",
+    "pyNumber": 1104
+  },
+  {
+    "id": "b00427cb-7bd8-4118-92c7-72dc43c511fe",
+    "name": "OPTIMIST",
+    "iconName": "optimist",
+    "pyNumber": 1655
+  },
+  {
+    "id": "8a869142-bb7e-4654-adab-660ba6de01ff",
+    "name": "OSPREY",
+    "iconName": "osprey",
+    "pyNumber": 928
+  },
+  {
+    "id": "1f55b4b6-54ac-4dd7-bdbf-2737f451c8a0",
+    "name": "PHANTOM",
+    "iconName": "phantom",
+    "pyNumber": 999
+  },
+  {
+    "id": "d34a9881-faa1-4653-921a-caa520e67966",
+    "name": "ROOSTER 8.1",
+    "iconName": "rooster81",
+    "pyNumber": 1051
+  },
+  {
+    "id": "24b82ef7-eb78-420e-b22b-675f09900f69",
+    "name": "RS 100 8.4",
+    "iconName": "rs10084",
+    "pyNumber": 1008
+  },
+  {
+    "id": "e1795121-7259-4e88-b600-915140539514",
+    "name": "RS 100 10.2",
+    "iconName": "rs100102",
+    "pyNumber": 981
+  },
+  {
+    "id": "e57d48bb-2e0b-4500-bb3d-16f2e2e80c14",
+    "name": "RS 200",
+    "iconName": "rs200",
+    "pyNumber": 1046
+  },
+  {
+    "id": "72e22f5c-f66e-48af-8bdd-4e797e4fe2f4",
+    "name": "RS 300",
+    "iconName": "rs300",
+    "pyNumber": 972
+  },
+  {
+    "id": "277893ec-e0f4-43ea-a6a0-b6e2904a37eb",
+    "name": "RS 400",
+    "iconName": "rs400",
+    "pyNumber": 942
+  },
+  {
+    "id": "cced53d1-3da9-41da-8ea5-9bf392dcf4d3",
+    "name": "RS 500",
+    "iconName": "rs500",
+    "pyNumber": 963
+  },
+  {
+    "id": "fdfdfea4-b36f-4f65-b8b3-0fbbe9a442a5",
+    "name": "RS 600",
+    "iconName": "rs600",
+    "pyNumber": 916
+  },
+  {
+    "id": "0cf2ae29-7bf7-4a17-94cf-02d16ecf2196",
+    "name": "RS 700",
+    "iconName": "rs700",
+    "pyNumber": 847
+  },
+  {
+    "id": "2ddf4e42-ff72-4efb-a246-a78fdb788f23",
+    "name": "RS 800",
+    "iconName": "rs800",
+    "pyNumber": 799
+  },
+  {
+    "id": "e539c862-3356-494b-9783-57f3df13a271",
+    "name": "RS AERO 5",
+    "iconName": "rsaero5",
+    "pyNumber": 1129
+  },
+  {
+    "id": "7e5c92d6-ca00-4517-ac8a-ca03c3130b80",
+    "name": "RS AERO 7",
+    "iconName": "rsaero7",
+    "pyNumber": 1068
+  },
+  {
+    "id": "16368ac2-a81c-4a3f-8ebb-a60353ace86e",
+    "name": "RS AERO 9",
+    "iconName": "rsaero9",
+    "pyNumber": 1019
+  },
+  {
+    "id": "c5520613-de60-4064-baae-e3cdefc1600b",
+    "name": "RS FEVA XL",
+    "iconName": "rsfevaxl",
+    "pyNumber": 1240
+  },
+  {
+    "id": "2e05e254-a900-4fa1-8329-758de950eaad",
+    "name": "RS TERA PRO",
+    "iconName": "rsterapro",
+    "pyNumber": 1364
+  },
+  {
+    "id": "a769a37e-6f98-438f-834f-fea7b3648ebd",
+    "name": "RS TERA SPORT",
+    "iconName": "rsterasport",
+    "pyNumber": 1432
+  },
+  {
+    "id": "1e7bd41d-b00a-4410-bab3-b91231521037",
+    "name": "RS VAREO",
+    "iconName": "rsvareo",
+    "pyNumber": 1090
+  },
+  {
+    "id": "d52ae75a-d9f7-4225-a463-c8f2f35ffc92",
+    "name": "RS VISION",
+    "iconName": "rsvision",
+    "pyNumber": 1128
+  },
+  {
+    "id": "9699a1d7-b42f-4fc3-a1a6-cbfb75cbcb85",
+    "name": "SCORPION",
+    "iconName": "scorpion",
+    "pyNumber": 1036
+  },
+  {
+    "id": "98f5f86e-6014-43b9-a4ec-ca3cbb39f888",
+    "name": "SOLO",
+    "iconName": "solo",
+    "pyNumber": 1143
+  },
+  {
+    "id": "cbdf7b23-4411-4642-b1fb-cf5936b2a0c4",
+    "name": "SOLUTION",
+    "iconName": "solution",
+    "pyNumber": 1087
+  },
+  {
+    "id": "9980ca20-2e91-4fc2-9fb1-8086937c3ab0",
+    "name": "STREAKER",
+    "iconName": "streaker",
+    "pyNumber": 1128
+  },
+  {
+    "id": "b9a76051-48c4-4934-97b9-f625b44b6eb4",
+    "name": "SUPERNOVA",
+    "iconName": "supernova",
+    "pyNumber": 1075
+  },
+  {
+    "id": "d90f6b0e-b996-4558-b044-68ff07274f7b",
+    "name": "TASAR",
+    "iconName": "tasar",
+    "pyNumber": 1015
+  },
+  {
+    "id": "e1d58b75-4038-4d41-8e13-662caf0aea37",
+    "name": "TOPPER",
+    "iconName": "topper",
+    "pyNumber": 1358
+  },
+  {
+    "id": "d258f2c8-c4f3-4431-be59-260ddf0a328f",
+    "name": "VORTEX",
+    "iconName": "vortex",
+    "pyNumber": 914
+  },
+  {
+    "id": "77d17974-ca4d-4852-bb30-96376000d504",
+    "name": "WAYFARER",
+    "iconName": "wayfarer",
+    "pyNumber": 1102
+  },
+  {
+    "id": "d67b9871-7a77-4862-b804-39ab692f560c",
+    "name": "14 INTERNATIONAL",
+    "iconName": "14international",
+    "pyNumber": 758
+  },
+  {
+    "id": "a15001fa-b5d9-40ae-a181-4f8728ee35ae",
+    "name": "B14",
+    "iconName": "b14",
+    "pyNumber": 862
+  },
+  {
+    "id": "137b0191-4912-43ef-b2b8-d60ae0c60ef6",
+    "name": "BUZZ",
+    "iconName": "buzz",
+    "pyNumber": 1026
+  },
+  {
+    "id": "b20e0815-690e-46f7-80cc-7eb522953d13",
+    "name": "CADET",
+    "iconName": "cadet",
+    "pyNumber": 1435
+  },
+  {
+    "id": "0e89146f-8a8b-4fae-932f-ca42a587b24a",
+    "name": "CANOE INTERNATIONAL",
+    "iconName": "canoeinternational",
+    "pyNumber": 893
+  },
+  {
+    "id": "825456d4-7cf8-448c-92b4-b7922deafd2c",
+    "name": "CHERUB",
+    "iconName": "cherub",
+    "pyNumber": 903
+  },
+  {
+    "id": "ad3e126a-3de3-4923-a32d-f49f8f0c2e59",
+    "name": "HADRON H2",
+    "iconName": "hadronh2",
+    "pyNumber": 1037
+  },
+  {
+    "id": "cd63af78-172e-4b8d-877d-b9c6bf78eb6c",
+    "name": "JAVELIN",
+    "iconName": "javelin",
+    "pyNumber": 941
+  },
+  {
+    "id": "e409d7e9-7f3b-4bd2-a641-53fd15101ede",
+    "name": "LASER STRATOS",
+    "iconName": "laserstratos",
+    "pyNumber": 1100
+  },
+  {
+    "id": "4df0e34b-78f9-4f11-8e82-0ffab1ae6d3c",
+    "name": "LASER VAGO XD",
+    "iconName": "laservagoxd",
+    "pyNumber": 1071
+  },
+  {
+    "id": "21e3a527-2685-4f32-ad43-49d4cd391c72",
+    "name": "MEGABYTE",
+    "iconName": "megabyte",
+    "pyNumber": 1071
+  },
+  {
+    "id": "38a10f2c-beea-4f1b-b289-26644b53528c",
+    "name": "SEAFLY",
+    "iconName": "seafly",
+    "pyNumber": 1080
+  },
+  {
+    "id": "03d1639b-66e5-4c35-927c-9290c08eefce",
+    "name": "SNIPE",
+    "iconName": "snipe",
+    "pyNumber": 1099
+  },
+  {
+    "id": "56a24ad1-68b7-4db9-b54f-c47faa1003b8",
+    "name": "TOPPER 4.2",
+    "iconName": "topper42",
+    "pyNumber": 1416
+  },
+  {
+    "id": "c477f8f6-065c-4e25-9904-aa0d3c220fe2",
+    "name": "WANDERER",
+    "iconName": "wanderer",
+    "pyNumber": 1190
+  },
+  {
+    "id": "21ca1006-5c8b-4bab-8a21-5a8d0758b9a0",
+    "name": "FLYING FIFTEEN",
+    "iconName": "flyingfifteen",
+    "pyNumber": 1015
+  },
+  {
+    "id": "093b65f3-f542-40be-ab0a-236aecb3ac8b",
+    "name": "K1",
+    "iconName": "k1",
+    "pyNumber": 1070
+  },
+  {
+    "id": "0fedcbc4-1609-457e-a574-cab33ec4e1d1",
+    "name": "K6",
+    "iconName": "k6",
+    "pyNumber": 909
+  },
+  {
+    "id": "3c9d3822-9c11-4936-a430-f1d4eb655c0a",
+    "name": "A CLASS",
+    "iconName": "aclass",
+    "pyNumber": 684
+  },
+  {
+    "id": "4f49db13-d843-4979-9146-df5ccbc600ec",
+    "name": "CATAPULT",
+    "iconName": "catapult",
+    "pyNumber": 903
+  },
+  {
+    "id": "85a5d81f-cfde-453c-8f6a-63ba72f4f677",
+    "name": "CHALLENGER",
+    "iconName": "challenger",
+    "pyNumber": 1173
+  },
+  {
+    "id": "a0f48a13-29c4-489d-8b98-c01a4e37fe00",
+    "name": "DART 18",
+    "iconName": "dart18",
+    "pyNumber": 824
+  },
+  {
+    "id": "3af7ca9f-96f6-4011-9814-ab39f69275b1",
+    "name": "FORMULA 18",
+    "iconName": "formula18",
+    "pyNumber": 680
+  },
+  {
+    "id": "0a1b109d-12fc-4dd2-89ba-68a631d179c0",
+    "name": "HURRICANE 5.9",
+    "iconName": "hurricane59",
+    "pyNumber": 695
+  },
+  {
+    "id": "0040d0ca-7231-450d-a1f1-0ac6c5cfd7dd",
+    "name": "SHADOW X",
+    "iconName": "shadowx",
+    "pyNumber": 750
+  },
+  {
+    "id": "977c672f-459b-498a-89ff-50fc85f99967",
+    "name": "SPITFIRE",
+    "iconName": "spitfire",
+    "pyNumber": 705
+  },
+  {
+    "id": "3b1ca50f-1dd7-4d35-ac2d-0e77a074405b",
+    "name": "SPRINT 15",
+    "iconName": "sprint15",
+    "pyNumber": 927
+  },
+  {
+    "id": "3eb95f5b-7afd-4a7a-ac2c-750084a896e4",
+    "name": "SPRINT 15 SPORT",
+    "iconName": "sprint15sport",
+    "pyNumber": 904
+  }
+]
