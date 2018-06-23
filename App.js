@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { createStackNavigator } from 'react-navigation'
+import { Provider } from 'mobx-react'
 
 import MainScreen from './MainScreen'
 import ClassesScreen from './ClassesScreen'
@@ -14,10 +14,12 @@ import AddRaceScreen from './AddRaceScreen'
 import RunRaceScreen from './RunRaceScreen'
 import RaceResults from './RaceResults'
 
-import { connect, Provider } from 'react-redux'
-import { store } from './Store'
+import raceStore from './RacesStore'
+import bClassStore from './BoatClassesStore'
+import boatStore from './BoatsStore'
+import peopleStore from './PeopleStore'
 
-import {} from './Loader'
+import { } from './FakeData'
 
 const StackNav = createStackNavigator(
   {
@@ -40,8 +42,12 @@ const StackNav = createStackNavigator(
 
 export default class Root extends Component {
   render() {
-    return <Provider store={store}>
+    return (<Provider 
+        raceStore={raceStore} 
+        bClassStore={bClassStore}
+        boatStore={boatStore}
+        peopleStore={peopleStore}>
       <StackNav/>
-    </Provider>
+    </Provider>)
   }
 }

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
-import { View } from 'react-native'
-import Svg, {G, Circle, Path} from 'react-native-svg'
+import Svg, {Path} from 'react-native-svg'
 
 export default class BoatIcon extends PureComponent {
     render() {

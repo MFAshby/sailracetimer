@@ -1,14 +1,12 @@
-import React, { Component, PureComponent } from 'react'
-import { View, Text, TextInput, Button, StyleSheet, Picker } from 'react-native'
+import React, { Component } from 'react'
+import { View, TextInput, Button, StyleSheet, Picker } from 'react-native'
 import ClassListItem from './ClassListItem'
 import MItemSelector from './MItemSelector'
+import { inject, observer } from 'mobx-react';
 
-import { addBoat, setNewBoatSailNumber, setNewBoatClass, setBoatClassSearch } from './Actions.js'
-import { Boat } from './DataObjects.js';
-import { connect } from 'react-redux'
-import { boatClassesListSelector, boatClassesFilteredSelector }  from './Selectors.js'
-
-class AddBoatScreen extends PureComponent {
+@inject("boatStore", "bClassStore")
+@observer
+export default class AddBoatScreen extends Component {
     static navigationOptions = ({navigation}) => {
         let { params = {} } = navigation.state 
         let { onPressSave = () => {} }=  params 
@@ -24,39 +22,41 @@ class AddBoatScreen extends PureComponent {
 
     constructor(props) {
         super(props)
-        this.onPressSave = this.onPressSave.bind(this)
         props.navigation.setParams({ onPressSave: this.onPressSave })
+
+        this.state = {
+            sailNumber: "",
+            boatClass: null,
+        }
     }
 
-    onPressSave() {
-        let boat = new Boat({
-            sailNumber: this.props.sailNumber, 
-            boatClassId: this.props.boatClass ? this.props.boatClass.id : ""
+    onPressSave = () => {
+        this.props.boatStore.newBoat({
+            sailNumber: this.state.sailNumber, 
+            boatClass: this.state.boatClass
         })
-        this.props.onSaveBoat(boat)
-        this.props.onChangeSailNumber()
-        this.props.onChangeClass()
         this.props.navigation.goBack()
     }
 
+    searchBoatClasses = (searchText) => {
+        searchText = searchText.toLowerCase()
+        let boatClasses = this.props.bClassStore.boatClasses
+        return boatClasses.filter(boatClass => boatClass.name.toLowerCase().startsWith(searchText))
+    }
+
     render() {
-        let pickerItems = this.props.boatClasses.map(boatClass => {
-            return <Picker.Item label={boatClass.name} value={boatClass} key={boatClass.id}/>
-        })
         return <View styles={styles.container}>
             <TextInput 
                 style={styles.textInput}
                 keyboardType="numeric"
-                value={this.props.sailNumber}
-                onChangeText={(text) => this.props.onChangeSailNumber(text)}
+                value={this.state.sailNumber}
+                onChangeText={ text => this.setState({sailNumber: text}) }
                 placeholder="Sail Number"/>
             <MItemSelector
-                    style={styles.autoComplete1}
-                    suggestions={this.props.boatClasses}
-                    searchText={this.props.boatClassSearch}
-                    setSearchText={text => this.props.onChangeClassSearch(text)}
-                    selectedItem={this.props.boatClass}
-                    setSelectedItem={item => this.props.onChangeClass(item)}
+                    style={ styles.autoComplete1 }
+                    search={ this.searchBoatClasses }
+                    selectedItem={ this.state.boatClass }
+                    setSelectedItem={ item => this.setState({boatClass: item}) }
                     renderItem={ item => <ClassListItem boatClass={item}/> }
                     itemToString={ item => item.name }
                     placeholder="Boat Class"/>
@@ -80,23 +80,3 @@ const styles = StyleSheet.create({
         zIndex: 1
     }
 })
-
-function mapStateToProps(state) {
-    return {
-        sailNumber: state.newBoat.sailNumber,
-        boatClass: state.newBoat.boatClass,
-        boatClassSearch: state.boatClassSearch,
-        boatClasses: boatClassesFilteredSelector(state)
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onChangeSailNumber: (sailNumber) => dispatch(setNewBoatSailNumber(sailNumber)),
-        onChangeClass: (boatClass) => dispatch(setNewBoatClass(boatClass)),
-        onChangeClassSearch: (text) => dispatch(setBoatClassSearch(text)),
-        onSaveBoat: (boat) => dispatch(addBoat(boat))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddBoatScreen)

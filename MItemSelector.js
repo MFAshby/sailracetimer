@@ -3,9 +3,8 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import Autocomplete from 'react-native-autocomplete-input'
 import MButton from './MButton'
 
-// suggestions (list object)
-// searchText string
-// setSearchText fn(string)
+// search ((string) => list object)
+// selectedItem object
 // setSelectedItem fn(object)
 // itemToString fn(object) > string
 // renderItem fn(object) > React Component
@@ -13,18 +12,19 @@ export default class MItemSelector extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            focussed: false
+            focussed: false,
+            searchText: ""
         }
     }
 
     render() {
         let searchBoxText = this.props.selectedItem ? 
             this.props.itemToString(this.props.selectedItem) : 
-            this.props.searchText
+            this.state.searchText
 
         let suggestions = this.props.selectedItem || !this.state.focussed ?
             [] :
-            this.props.suggestions
+            this.props.search(this.state.searchText)
 
         let containerStyle = this.props.style ? 
             [styles.containerView, this.props.style] : 
@@ -40,9 +40,9 @@ export default class MItemSelector extends Component {
                     placeholder={this.props.placeholder}
                     data={suggestions}
                     defaultValue={searchBoxText}
-                    onChangeText={text => { this.props.setSearchText(text) }}
-                    onFocus={() => this.setState({ focussed: true })}
-                    onEndEditing={() => this.setState({ focussed: false })}
+                    onChangeText={ text => this.setState({searchText: text}) }
+                    onFocus={ () => this.setState({ focussed: true }) }
+                    onEndEditing={ () => this.setState({ focussed: false }) }
                     renderItem={item => 
                         <TouchableOpacity
                             onPress={() => this.props.setSelectedItem(item)}>

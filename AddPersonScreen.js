@@ -1,10 +1,11 @@
-import React, { Component, PureComponent } from 'react'
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native'
-import { addPerson, setNewPersonName } from './Actions.js'
-import { Person } from './DataObjects.js';
-import { connect } from 'react-redux'
+import React, { PureComponent } from 'react'
+import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native'
+import { Camera, Permissions } from 'expo'
+import { inject } from 'mobx-react'
+import { Ionicons } from '@expo/vector-icons'
 
-class AddPersonScreen extends PureComponent {
+@inject("peopleStore")
+export default class AddPersonScreen extends PureComponent {
     static navigationOptions = ({navigation}) => {
         let { params = {} } = navigation.state
         let { onPressSave = () => {} } = params 
@@ -20,24 +21,88 @@ class AddPersonScreen extends PureComponent {
 
     constructor(props) {
         super(props)
-        this.onPressSave = this.onPressSave.bind(this)
         props.navigation.setParams({ onPressSave: this.onPressSave })
+        this.state = {
+            name: "",
+            imageUri: null,
+
+            cameraPermission: false,
+            cameraType: Camera.Constants.Type.back
+        }
     }
 
-    onPressSave() {
-        let person = new Person({name: this.props.name})
-        this.props.onSavePerson(person)
-        this.props.onChangeName()
+    async componentDidMount() {
+        let resp = await Permissions.askAsync(Permissions.CAMERA)
+        this.setState({
+            cameraPermission: resp.status === 'granted'
+        })
+    }
+
+    onPressSave = () => {
+        this.props.peopleStore.newPerson({
+            name: this.state.name,
+            imageUri: this.state.imageUri
+        })
         this.props.navigation.goBack()
     }
 
+    snap = async () => {
+        let resp = await this.camera.takePictureAsync()
+        this.setState({
+            imageUri: resp.uri
+        })
+    }
+
+    switchCamera = () => {
+        let isFront = this.state.cameraType === Camera.Constants.Type.front
+        let newType =  isFront ? Camera.Constants.Type.back : Camera.Constants.Type.front
+        alert(`Switching camera type from ${this.state.cameraType} to ${newType}`)
+        this.setState({
+            cameraType: newType
+        })
+    }
+
+    clearPic = () => {
+        this.setState({
+            imageUri: null
+        })
+    }
+
     render() {
-        return <View styles={styles.container}>
+        var imageComp
+        if (this.state.imageUri) {
+            imageComp = <Image
+                source={{uri: this.state.imageUri, width:300, height:300}}/>
+        } else if (this.state.cameraPermission) {
+            imageComp = <View>
+                <Camera     
+                    ref={ ref => this.camera = ref }
+                    style={ {width: 300, height: 300} }
+                    type={ this.state.cameraType }/>
+                <Ionicons.Button 
+                    name="md-camera"
+                    onPress={ this.snap }/>
+                <Ionicons.Button 
+                    name="md-reverse-camera"
+                    onPress={ this.switchCamera }/>
+            </View>
+        } else {
+            imageComp = <Text>You have not allowed permission to use the camera</Text>
+        }
+        return <View styles={ styles.container }>
             <TextInput 
-                style={styles.textInput}
-                value={this.props.name}
-                onChangeText={(text) => this.props.onChangeName(text)}
+                autoFocus
+                style={ styles.textInput }
+                value={ this.state.name }
+                onChangeText={ text => this.setState({name: text}) }
                 placeholder="Name"/>
+            {imageComp}
+            <Button
+                title="Snap"
+                onPress={ this.snap } />
+            <Button
+                title="Clear"
+                onPress={ this.clearPic } />
         </View>
     }
 }
@@ -50,18 +115,3 @@ const styles = StyleSheet.create({
         height: 50,
     }
 })
-
-function mapStateToProps(state) {
-    return {
-        name: state.newPerson.name
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onChangeName: (name) => dispatch(setNewPersonName(name)),
-        onSavePerson: (person) => dispatch(addPerson(person))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddPersonScreen)

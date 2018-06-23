@@ -1,30 +1,17 @@
-import React, { Component, PureComponent } from 'react'
-import { View, Text, TextInput, Button, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
-import Autocomplete from 'react-native-autocomplete-input'
+import React, { Component } from 'react'
+import { View, Text, Button, StyleSheet, FlatList } from 'react-native'
 import MButton from './MButton'
 import MItemSelector from './MItemSelector'
-import { addRace, addRaceEntry, setNewRaceEntryHelm, setNewRaceEntryBoat, setNewRaceEntryHelmSearch, setNewRaceEntryBoatSearch, addNewRaceEntry, clearNewRace, removeNewRaceEntry } from './Actions.js'
-import { Person, Race, RaceEntry } from './DataObjects.js';
-import { connect } from 'react-redux'
-import { helmFilteredPeopleSelector, boatsFilteredSelector } from './Selectors'
+import { RaceEntry } from './RacesStore'
+import { inject, observer } from 'mobx-react'
+import { observable } from 'mobx'
 
+import PeopleListItem from './PeopleListItem'
+import BoatListItem from './BoatListItem'
 
-class RaceEntriesList extends PureComponent {
-    render() {
-        return <FlatList
-            data={this.props.entries}
-            keyExtractor={(item) => item.id}
-            renderItem={({item}) => 
-                <View
-                    style={styles.entryListItem}>
-                    <Text>{item.helmName} {item.boatSailNumber}</Text>
-                    <Button title="X" onPress={() => this.props.onPressRemove(item)}/>
-                </View>}
-            />
-    }
-}
-
-class AddRaceScreen extends PureComponent {
+@inject("raceStore", "peopleStore", "boatStore")
+@observer
+export default class AddRaceScreen extends Component {
     static navigationOptions = ({navigation}) => {
         let { params = {} } = navigation.state
         let { onPressSave = () => {} } = params 
@@ -38,61 +25,83 @@ class AddRaceScreen extends PureComponent {
         }
     }
 
+    @observable entries = []
+    @observable newEntryHelm = null
+    @observable newEntryBoat = null
+
     constructor(props) {
         super(props)
-        this.onPressSave = this.onPressSave.bind(this)
-        this.addRaceEntry = this.addRaceEntry.bind(this)
         props.navigation.setParams({ onPressSave: this.onPressSave })
     }
 
-    onPressSave() {
-        let race = new Race({entries: this.props.entries})
-        this.props.saveNewRace(race)
-        this.props.clearNewRace()
+    onPressSave = () => {
+        this.props.raceStore.newRace({ entries: this.entries })
         this.props.navigation.goBack()
     }
 
-    addRaceEntry() {
-        let helmId = this.props.newEntryHelm ? this.props.newEntryHelm.id : ""
-        let boatId = this.props.newEntryBoat ? this.props.newEntryBoat.id : ""
-        
-        let raceEntry = new RaceEntry({helmId: helmId, boatId: boatId})
-        console.log("Adding race entry with helm " + raceEntry.helmName + " boat " + raceEntry.boatSailNumber)
-        this.props.addNewRaceEntry(raceEntry)
+    addRaceEntry = () => {
+        let raceEntry = new RaceEntry({
+            helm: this.newEntryHelm, 
+            boat: this.newEntryBoat
+        })
+        this.entries.push(raceEntry)
+    }
+
+    removeEntry = (entry) => {
+        this.entries.splice(this.entries.indexOf(entry), 1)
+    }
+
+    searchPeople = (text) => {
+        text = text.toLowerCase()
+        let people = this.props.peopleStore.people
+        return people.filter(person => person.name.toLowerCase().startsWith(text))
+    }
+
+    searchBoats = (text) => {
+        let boats = this.props.boatStore.boats
+        return boats.filter(boat => boat.sailNumber.startsWith(text))
     }
 
     render() {
+        
+        // Need to actually access entries in order for re-render to happen
+        // when entries is changed
+        let entries = this.entries.slice()
         return <View>
             <View>
                 <MItemSelector
-                    style={styles.autoComplete1}
-                    suggestions={this.props.people}
-                    searchText={this.props.newEntryHelmSearch}
-                    setSearchText={text => this.props.setHelmSearch(text)}
-                    selectedItem={this.props.newEntryHelm}
-                    setSelectedItem={(item) => this.props.setNewEntryHelm(item)}
-                    itemToString={(item) => item.name}
+                    style={ styles.autoComplete1 }
+                    search={ this.searchPeople }
+                    selectedItem={ this.newEntryHelm }
+                    setSelectedItem={ item  => this.newEntryHelm = item }
+                    renderItem={ item => <PeopleListItem person={item} />}
+                    itemToString={ item => item.name }
                     placeholder="Helm name"/>
                 <MItemSelector
                     style={styles.autoComplete2}
-                    suggestions={this.props.boats}
-                    searchText={this.props.newEntryBoatSearch}
-                    setSearchText={text => this.props.setBoatSearch(text)}
-                    selectedItem={this.props.newEntryBoat}
-                    setSelectedItem={(item) => this.props.setNewEntryBoat(item)}
-                    itemToString={(item) => item.sailNumber}
+                    search={ this.searchBoats }
+                    selectedItem={ this.newEntryBoat }
+                    setSelectedItem={ item => this.newEntryBoat = item }
+                    renderItem={ item => <BoatListItem boat={item}/> }
+                    itemToString={ item => item.sailNumber}
                     placeholder="Sail number"/>
                 <MButton
-                    style={styles.addEntryButton}
-                    onPress={this.addRaceEntry}
+                    style={ styles.addEntryButton }
+                    onPress={ this.addRaceEntry }
                     title="Add"/>
             </View>
             <View style={styles.restContainer}>
-                <RaceEntriesList 
-                    entries={this.props.entries}
-                    onPressRemove={(entry) => this.props.removeEntry(entry)}/>
+            <FlatList
+                data={entries}
+                keyExtractor={ entry => entry.id}
+                renderItem={({item}) => 
+                    <View
+                        style={ styles.entryListItem }>
+                        <Text>{item.helmName} {item.boatSailNumber}</Text>
+                        <Button title="X" onPress={() => this.removeEntry(item)}/>
+                    </View>}
+                />
             </View>
-            
         </View>
     }
 }
@@ -135,30 +144,3 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     }
 })
-
-function mapStateToProps(state) {
-    return {
-        entries: state.newRace.entries,
-        people: helmFilteredPeopleSelector(state),
-        boats: boatsFilteredSelector(state),
-        newEntryHelm: state.newRace.helm,
-        newEntryBoat: state.newRace.boat,
-        newEntryHelmSearch: state.newRace.helmSearch,
-        newEntryBoatSearch: state.newRace.boatSearch,
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        saveNewRace: (race) => dispatch(addRace(race)),
-        clearNewRace: () => dispatch(clearNewRace()),
-        addNewRaceEntry: (entry) => dispatch(addNewRaceEntry(entry)),
-        removeEntry: (entry) => dispatch(removeNewRaceEntry(entry)),
-        setNewEntryHelm: (helm) => dispatch(setNewRaceEntryHelm(helm)),
-        setNewEntryBoat: (boat) => dispatch(setNewRaceEntryBoat(boat)),
-        setHelmSearch: (query) => dispatch(setNewRaceEntryHelmSearch(query)),
-        setBoatSearch: (query) => dispatch(setNewRaceEntryBoatSearch(query)),
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddRaceScreen)

@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native'
-import { setNewBoatClassName, setNewBoatClassPyNumber, addBoatClass } from './Actions.js'
-import { BoatClass } from './DataObjects.js';
-import { connect } from 'react-redux'
+import { View, TextInput, Button, StyleSheet } from 'react-native'
+import { inject } from 'mobx-react';
 
-class AddBoatClassScreen extends Component {
+@inject("bClassStore")
+export default class AddBoatClassScreen extends Component {
     static navigationOptions = ({navigation}) => {
         let { params = {} } = navigation.state 
         let { onPressSave = () => {} }=  params 
@@ -22,29 +21,32 @@ class AddBoatClassScreen extends Component {
         super(props)
         this.onPressSave = this.onPressSave.bind(this)
         props.navigation.setParams({ onPressSave: this.onPressSave })
+
+        this.state = {
+            name: "",
+            pyNumber: 1000
+        }
     }
 
     onPressSave() {
-        let boatClass = new BoatClass({name: this.props.name, pyNumber: this.props.pyNumber})
-        this.props.onSaveBoatClass(boatClass)
-        // Reset defaults
-        this.props.onChangeName()
-        this.props.onChangePyNumber()
+        this.props.bClassStore.newBoatClass({name: this.state.name, 
+            pyNumber: this.state.pyNumber})
         this.props.navigation.goBack()
     }
 
     render() {
         return <View styles={styles.container}>
             <TextInput 
+                autoFocus
                 style={styles.textInput}
-                value={this.props.name}
-                onChangeText={(text) => this.props.onChangeName(text)}
+                value={this.state.name}
+                onChangeText={text => this.setState({name: text}) }
                 placeholder="Name"/>
             <TextInput 
                 style={styles.textInput}
-                value={`${this.props.pyNumber}`}
+                value={`${this.state.pyNumber}`}
                 keyboardType="numeric"
-                onChangeText={(text) => this.props.onChangePyNumber(parseInt(text))}
+                onChangeText={text => this.setState({pyNumber: parseInt(text)}) }
                 placeholder="Portsmouth Yardstick Number"/>
         </View>
     }
@@ -58,20 +60,3 @@ const styles = StyleSheet.create({
         height: 50,
     }
 })
-
-function mapStateToProps(state) {
-    return {
-        name: state.newBoatClass.name,
-        pyNumber: state.newBoatClass.pyNumber
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onChangeName: (name) => dispatch(setNewBoatClassName(name)),
-        onChangePyNumber: (pyNumber) => dispatch(setNewBoatClassPyNumber(pyNumber)),
-        onSaveBoatClass: (boatClass) => dispatch(addBoatClass(boatClass))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddBoatClassScreen)

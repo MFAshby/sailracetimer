@@ -1,34 +1,32 @@
-import React, { Component, PureComponent } from 'react'
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Button } from 'react-native'
-import { connect } from 'react-redux'
-import Icon from './Icon.js'
-import {  boatsListSelector } from './Selectors'
+import React, { Component } from 'react'
+import { Alert, StyleSheet, View, Text, FlatList, TouchableOpacity, Button } from 'react-native'
+import { inject, observer } from 'mobx-react';
+import BoatListItem from './BoatListItem';
 
-class BoatsList extends PureComponent {
-    _keyExtractor = (boat, index) => {
-        return boat.id
-    }
-
+// onPresssItem
+// onLongPressItem
+@inject("boatStore")
+@observer
+class BoatsList extends Component {
     _renderItem = ({item}) => {
         return (
             <TouchableOpacity 
                 onLongPress={() => this.props.onLongPressItem(item)}
                 onPress={() => this.props.onPressItem(item)}>
-                <View style={styles.listItem}>
-                    <Text>{item.sailNumber}</Text>
-                </View>
+                <BoatListItem boat={item}/>
             </TouchableOpacity>)
     }
 
     render() {
+        let boats = this.props.boatStore.boats.slice()
         return <FlatList 
-                data={this.props.boats}
-                keyExtractor={this._keyExtractor}
+                data={boats}
+                keyExtractor={ boat => boat.id}
                 renderItem={this._renderItem}/>
     }
 }
 
-class BoatsScreen extends PureComponent {
+export default class BoatsScreen extends Component {
     static navigationOptions = ({navigation}) => {
         return {
             headerTitle: "Boats",
@@ -38,11 +36,23 @@ class BoatsScreen extends PureComponent {
         }
     }
 
+    confirmDeleteBoat = boat => {
+        Alert.alert(
+            'Confirm Delete',
+            'Are you sure you want to delete this boat?',
+            [
+                { text: 'No' },
+                { text: 'Yes', onPress: () => boat.delete() }
+            ]
+        )
+    }
+
     render() {
         return (
         <View style={styles.container}>
-            <BoatsList       
-                {...this.props}/>
+            <BoatsList
+                onPressItem={ item => console.log("Pressed ", item) }
+                onLongPressItem={ this.confirmDeleteBoat }/>
         </View>)
     }
 }
@@ -58,11 +68,3 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 })
-
-function mapStateToProps(state) {
-    return {
-        boats: boatsListSelector(state)
-    }
-}
-
-export default connect(mapStateToProps)(BoatsScreen)

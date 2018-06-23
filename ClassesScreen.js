@@ -1,17 +1,11 @@
-import React, { Component, PureComponent } from 'react'
-import { StyleSheet, Text, View, FlatList, Button, Image, TouchableOpacity } from 'react-native'
+import React, { Component } from 'react'
+import { StyleSheet, View, FlatList, Button, Alert, TouchableOpacity } from 'react-native'
 import ClassListItem from './ClassListItem'
-import { BoatClass } from './DataObjects.js'
-import { connect } from 'react-redux'
-import Icon from './Icon.js'
-import {  boatClassesListSelector } from './Selectors'
+import { observer, inject } from 'mobx-react'
 
-// props: boatClasses, onLongPressItem, onPressItem
-class ClassesList extends PureComponent {
-    _keyExtractor = (item, index) => {
-        return item.id
-    }
-
+@inject("bClassStore")
+@observer
+class ClassesList extends Component {
     _renderItem = ({item}) => {
         return (
             <TouchableOpacity 
@@ -22,14 +16,15 @@ class ClassesList extends PureComponent {
     }
 
     render() {
+        let boatClasses = this.props.bClassStore.boatClasses.slice()
         return <FlatList 
-                data={this.props.boatClasses}
-                keyExtractor={this._keyExtractor}
+                data={boatClasses}
+                keyExtractor={item => item.id}
                 renderItem={this._renderItem}/>
     }
 }
 
-class ClassesScreen extends Component {
+export default class ClassesScreen extends Component {
     static navigationOptions = ({navigation}) => {
         return {
             headerTitle: 'Boat Classes',
@@ -40,8 +35,15 @@ class ClassesScreen extends Component {
         }
     }
 
-    _selectItem = (item) => {
-        console.log("Item selected " + item)
+    confirmDeleteBoatClass = (boatClass) => {
+        Alert.alert(
+            'Confirm Delete',
+            'Are you sure you want to delete this boat class?',
+            [
+                { text: 'No' },
+                { text: 'Yes', onPress: () => boatClass.delete() }
+            ]
+        )
     }
 
     render() {
@@ -49,8 +51,8 @@ class ClassesScreen extends Component {
             <View
                 style={styles.container}>
                 <ClassesList
-                    boatClasses={this.props.boatClasses}
-                    onPressItem={this._selectItem}/>
+                    onPressItem={ item => {} }
+                    onLongPressItem={ this.confirmDeleteBoatClass }/>
             </View>)
     }
 }
@@ -63,13 +65,3 @@ const styles = StyleSheet.create({
         
     }
 })
-
-
-// Now for the meat
-function mapStateToProps(state) { 
-    return {
-        boatClasses: boatClassesListSelector(state)
-    }
-}
-
-export default connect(mapStateToProps)(ClassesScreen)

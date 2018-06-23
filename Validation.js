@@ -2,7 +2,6 @@
 // Applied on the UI for disabling components,
 // In the action creators bc why not.
 // In the reducer in case a rogue action gets dispatched
-import { Race, RaceEntry, Person, Boat, BoatClass } from './DataObjects'
 import moment from 'moment'
 
 // A race with no entries is invalid
@@ -29,12 +28,12 @@ function validStartRace(race = null) {
     return true
 }
 
-function validLapEntry(race = null, raceEntry = null) {
-    if (!race || !raceEntry) {
+function validLapEntry(raceEntry = null) {
+    if (!raceEntry || !raceEntry.race) {
         return false
     }
 
-    if (!race.start) {
+    if (!raceEntry.race.start) {
         return false
     }
 
@@ -45,16 +44,18 @@ function validLapEntry(race = null, raceEntry = null) {
     return true
 }
 
-function validFinishEntry(race = null, entry = null, finish = null) {
-    if (!race || !entry) {
+function validFinishEntry(entry = null, finish = null) {
+    if (!entry || !entry.race) {
         return false
     }
+
+    let race = entry.race
 
     if (!race.start) {
         return false
     }
 
-    if (race.finish) {
+    if (entry.finish) {
         return false
     }
 

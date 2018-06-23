@@ -1,14 +1,10 @@
 import React, { Component, PureComponent } from 'react'
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button, Alert } from 'react-native'
-import { connect } from 'react-redux'
-import { racesListSelector } from './Selectors'
-import { setSelectedRace, deleteRace } from './Actions';
+import { inject, observer } from 'mobx-react'
 
-class RacesList extends PureComponent {
-    _keyExtractor = (race, index) => {
-        return race.id
-    }
-
+@inject("raceStore")
+@observer
+class RacesList extends Component {
     _renderItem = ({item}) => {
         return (
             <TouchableOpacity 
@@ -22,14 +18,16 @@ class RacesList extends PureComponent {
     }
 
     render() {
+        let races = this.props.raceStore.races.slice()
         return <FlatList 
-                data={this.props.races}
-                keyExtractor={this._keyExtractor}
+                data={ races }
+                keyExtractor={ race => race.id }
                 renderItem={this._renderItem}/>
     }
 }
 
-class RacesScreen extends Component {
+@inject("raceStore")
+export default class RacesScreen extends Component {
     static navigationOptions = ({navigation}) => {
         return {
             headerTitle: "Races",
@@ -41,16 +39,8 @@ class RacesScreen extends Component {
         }
     }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            confirmDeleteShowing: false,
-            selectedItem: undefined,
-        }
-    }
-
-    _onPressItem = (item) => {
-        this.props.setSelectedRace(item)
+    raceSelected = (item) => {
+        this.props.raceStore.selectedRace = item
         if (item.finish) {
             this.props.navigation.navigate('RaceResults') 
         } else {
@@ -58,24 +48,23 @@ class RacesScreen extends Component {
         }
     }
 
-    _onLongPressItem = (item) => {
+    confirmDeleteRace = race => {
         Alert.alert(
             'Confirm Delete',
             'Are you sure you want to delete this race?',
             [
                 {text: 'No'},
-                {text: 'Yes', onPress: () => this.props.deleteRace(item)},
+                {text: 'Yes', onPress: () => race.delete()},
             ]
         )
     }
 
-    render() {
+    render() {        
         return (
             <View style={styles.container}>
                 <RacesList 
-                    onPressItem={this._onPressItem}
-                    onLongPressItem={this._onLongPressItem}
-                    {...this.props}/>
+                    onPressItem={ this.raceSelected }
+                    onLongPressItem={ this.confirmDeleteRace }/>
             </View>
         )
     }
@@ -83,28 +72,13 @@ class RacesScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        // backgroundColor: 'green'
+        backgroundColor: 'green'
     },
     listItem: {
         height: 30,
-        padding: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-    },
+        margin: 10
+    }
 })
-
-function mapStateToProps(state) {
-    return {
-        races: racesListSelector(state),
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        setSelectedRace: race => dispatch(setSelectedRace(race)),
-        deleteRace: race => dispatch(deleteRace(race))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(RacesScreen)

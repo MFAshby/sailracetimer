@@ -1,9 +1,7 @@
 import React, { Component, PureComponent } from 'react'
 import { View, Text, FlatList, StyleSheet, Button } from 'react-native'
-import { connect } from 'react-redux'
-import { startRace, lapEntry, finishEntry } from './Actions'
-import { selectedRaceSelector } from './Selectors'
-import { validStartRace, validLapEntry, validFinishEntry } from './Validation';
+import { validStartRace, validLapEntry, validFinishEntry } from './Validation'
+import { inject, observer } from 'mobx-react'
 
 class Elapsed extends Component {
     componentDidMount() {
@@ -19,78 +17,65 @@ class Elapsed extends Component {
     }
 }
 
-class Entry extends PureComponent {
+@observer
+class Entry extends Component {
     render() {
-        let validLap = validLapEntry(this.props.race, this.props.entry)
-        let validFinish = validFinishEntry(this.props.race, this.props.entry, new Date())
+        let entry = this.props.entry
+        let validLap = validLapEntry(entry)
+        let validFinish = validFinishEntry(entry, new Date())
         return <View style={styles.listItem}>
-                <Text>Helm: {this.props.entry.helmName}</Text>
-                <Text>Sail: {this.props.entry.boatSailNumber}</Text>
-                <Text>Laps: {this.props.entry.laps.length}</Text>
-                <Elapsed elapsedDesc={() => this.props.entry.elapsedDesc}/>
+                <Text>Helm: {entry.helmName}</Text>
+                <Text>Sail: {entry.boatSailNumber}</Text>
+                <Text>Laps: {entry.laps}</Text>
+                <Elapsed elapsedDesc={ () => entry.elapsedDesc }/>
                 <Button 
                     title="Lap" 
-                    onPress={this.props.onPressLap}
-                    disabled={!validLap}/>
+                    onPress={ () => entry.addLap() }
+                    disabled={ !validLap }/>
                 <Button 
                     title="Finish" 
-                    onPress={this.props.onPressFinish}
-                    disabled={!validFinish}/>
+                    onPress={ () => entry.setFinished() }
+                    disabled={ !validFinish }/>
             </View>
     }
 }
 
-class RunRaceScreen extends Component {
-    static navigationOptions = ({navigation}) => {
-        return {
-            headerTitle: "Race in Progress"
-        }
+@inject("raceStore")
+@observer
+export default class RunRaceScreen extends Component {
+    static navigationOptions = {
+        title: "Race in Progress"
     }
 
     render() {
-        if (!this.props.race) {
+        let race = this.props.raceStore.selectedRace
+        if (!race) {
             return <Text>No race selected</Text>
         }
-        let race = this.props.race
-        let raceId = this.props.race.id
-        let validStart = validStartRace(this.props.race)
-        return <View>
-            <Elapsed elapsedDesc={() => this.props.race.elapsedDesc}/>
+
+        // Ensure we access the @observable property race.entries
+        let entries = race.entries.slice()
+
+        return <View style={ styles.container }>
+            <Elapsed elapsedDesc={() => race.elapsedDesc}/>
             <Button 
                 title="Start" 
-                onPress={ () => this.props.startRace(race) }
-                disabled={!validStart}/>
+                onPress={ () => race.start = new Date() }
+                disabled={ !validStartRace(race) }/>
             <FlatList
-                data={this.props.race.entries}
-                keyExtractor={entry => entry.id}
+                data={ entries }
+                keyExtractor={ entry => entry.id }
                 renderItem={ ({item}) => 
-                    <Entry 
-                        race={race}
-                        entry={item}
-                        onPressLap={(entry) => this.props.lapEntry(race, item)}
-                        onPressFinish={(entry) => this.props.finishEntry(race, item)} /> 
+                    <Entry entry={ item }/> 
                 }/>
         </View>
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        race: selectedRaceSelector(state),
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        startRace: (race) => dispatch(startRace(race)),
-        lapEntry: (race, entry) => dispatch(lapEntry(race, entry)),
-        finishEntry: (race, entry) => dispatch(finishEntry(race, entry))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(RunRaceScreen)
-
 const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
     listItem: {
         padding: 5,
         alignItems: 'flex-start',

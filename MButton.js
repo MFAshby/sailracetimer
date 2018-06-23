@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 export default class MButton extends PureComponent {
     render() {

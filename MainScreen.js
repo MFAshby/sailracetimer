@@ -1,8 +1,7 @@
 import React, { Component, PureComponent } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, AsyncStorage, Button } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import Icon from './Icon.js'
-import { connect } from 'react-redux'
-import { racesCountSelector, peopleCountSelector, boatsCountSelector, boatClassesCountSelector } from './Selectors'
+import { observer, inject } from 'mobx-react'
 
 class MainScreenButton extends PureComponent {
     render() {
@@ -16,36 +15,39 @@ class MainScreenButton extends PureComponent {
     }
 }
 
-class MainScreen extends Component {
-    static navigationOptions = ({navigation}) => {
-        return {
-            headerTitle: "Sail Race Timer",
-            headerRight: (<Button title="Clear data" onPress={ () => AsyncStorage.clear() }/>)
-        }
+@inject("raceStore", "bClassStore", "boatStore", "peopleStore")
+@observer
+export default class MainScreen extends Component {
+    static navigationOptions = {
+        title: "Sail Race Timer"
     }
 
     render() {
+        let racesCount = this.props.raceStore.races.length
+        let boatClassesCount = this.props.bClassStore.boatClasses.length
+        let boatsCount = this.props.boatStore.boats.length
+        let peopleCount = this.props.peopleStore.people.length
         return (
         <View style={styles.container}>
             <View style={styles.row}>
                 <MainScreenButton 
                     iconName='race'
                     onPress={() => this.props.navigation.navigate('RacesScreen')}
-                    dataDescription={`${this.props.racesCount} Races `}/>
+                    dataDescription={`${racesCount} Races `}/>
                 <MainScreenButton
                     iconName='person'
                     onPress={() => this.props.navigation.navigate('PeopleScreen')}
-                    dataDescription={`${this.props.peopleCount} People`}/>
+                    dataDescription={`${peopleCount} People`}/>
             </View>
             <View style={styles.row}>
                 <MainScreenButton
                     iconName='boat'
                     onPress={() => this.props.navigation.navigate('BoatsScreen')}
-                    dataDescription={`${this.props.boatsCount} Boats`}/>
+                    dataDescription={`${boatsCount} Boats`}/>
                 <MainScreenButton
                     iconName='class'
                     onPress={() => this.props.navigation.navigate('ClassesScreen')}
-                    dataDescription={`${this.props.boatClassesCount} Boat Classes`}/>
+                    dataDescription={`${boatClassesCount} Boat Classes`}/>
             </View>
         </View>
         )
@@ -53,28 +55,17 @@ class MainScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-},
-row: {
-    flexDirection: 'row',
-},
-cell: {
-    alignItems: 'center',
-    padding: 20,
-},
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    row: {
+        flexDirection: 'row',
+    },
+    cell: {
+        alignItems: 'center',
+        padding: 20,
+    },
 })
-  
-const mapStateToProps = (state) => {
-    return {
-        racesCount: racesCountSelector(state),
-        peopleCount: peopleCountSelector(state),
-        boatsCount: boatsCountSelector(state),
-        boatClassesCount: boatClassesCountSelector(state),
-    }
-}
-
-export default connect(mapStateToProps)(MainScreen)

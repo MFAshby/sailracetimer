@@ -1,33 +1,33 @@
-import React, { Component, PureComponent } from 'react'
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Button } from 'react-native'
-import { connect } from 'react-redux'
-import { peopleListSelector }  from './Selectors'
+import React, { Component } from 'react'
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Button, Alert } from 'react-native'
+import { observer, inject } from 'mobx-react'
+import PeopleListItem from './PeopleListItem';
 
-class PeopleList extends PureComponent {
-    _keyExtractor = (person, index) => {
-        return person.id
-    }
 
+@inject("peopleStore")
+@observer
+class PeopleList extends Component {
     _renderItem = ({item}) => {
         return (
             <TouchableOpacity 
                 onLongPress={() => this.props.onLongPressItem(item)}
                 onPress={() => this.props.onPressItem(item)}>
-                <View style={styles.listItem}>
-                    <Text>{item.name}</Text>
-                </View>
+                <PeopleListItem
+                    person={item}/>
             </TouchableOpacity>)
     }
 
     render() {
+        // Need to dereference the observable for mobx to realize we are observing it
+        let people = this.props.peopleStore.people.slice()
         return <FlatList 
-                data={this.props.people}
-                keyExtractor={this._keyExtractor}
-                renderItem={this._renderItem}/>
+                data={ people }
+                keyExtractor={ person => person.id }
+                renderItem={ this._renderItem }/>
     }
 }
 
-class PeopleScreen extends Component {
+export default class PeopleScreen extends Component {
     static navigationOptions = ({navigation}) => {
         return {
             headerTitle: "People",
@@ -39,10 +39,22 @@ class PeopleScreen extends Component {
         }
     }
 
+    confirmDeletePerson = person => {
+        Alert.alert(
+            'Confirm Delete',
+            'Are you sure you want to delete this person?',
+            [
+                { text: 'No' },
+                { text: 'Yes', onPress: () => person.delete() }
+            ]
+        )
+    }
+
     render() {
         return (<View style={styles.container}>
                 <PeopleList       
-                    {...this.props}/>
+                    onPressItem={ item => console.log("Pressed person", item) }
+                    onLongPressItem={ this.confirmDeletePerson }/>
             </View>)
     }
 }
@@ -50,19 +62,5 @@ class PeopleScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'red'
-    },
-    listItem: {
-        height: 30,
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-    },
-})
-
-function mapStateToProps(state) {
-    return {
-        people: peopleListSelector(state)
     }
-}
-
-export default connect(mapStateToProps)(PeopleScreen)
+})
