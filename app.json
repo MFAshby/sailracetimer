@@ -1,5 +1,15 @@
 {
   "expo": {
-    "sdkVersion": "27.0.0"
+    "name": "Sail Race Timer",
+    "slug": "sail-race-timer",
+    "version": "0.0.1",
+    "sdkVersion": "27.0.0",
+    "android": {
+      "package": "net.mfashby.sailracetimer",
+      "adaptiveIcon": {
+        "foregroundImage": "./icons/logo.png",
+        "backgroundColor": "#000000"
+      }
+    }
   }
 }

@@ -3,11 +3,11 @@ import { AsyncStorage } from 'react-native'
 
 export default class StorageImpl {
     storageKey
-    devModeDefaultData
+    defaultData
 
-    constructor(storageKey = "", devModeDefaultData = []) {
+    constructor(storageKey = "", defaultData = []) {
         this.storageKey = storageKey
-        this.devModeDefaultData = devModeDefaultData
+        this.defaultData = defaultData
     }
 
     save = async (value) => {
@@ -24,14 +24,8 @@ export default class StorageImpl {
                 console.log("Got from storage", item)
                 return JSON.parse(item)
             }
-            if (__DEV__) {
-                console.log("Dev mode: returning fake data")
-                return this.devModeDefaultData
-            }
-    
-            console.log("No data: returning empty list")
-            return []
-
+            console.log("No data, returning default")
+            return this.defaultData
         } catch (err) {
             console.log(err)
             return []
