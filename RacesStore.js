@@ -1,6 +1,6 @@
 import moment from 'moment'
 import _ from 'lodash'
-import { observable, computed } from 'mobx'
+import { observable, computed, autorun } from 'mobx'
 import v4uuid from './uuid'
 
 const dateFormat = "DD MMM YYYY HH:mm"
@@ -31,6 +31,36 @@ export class RaceEntry {
         this.finish = finish
         this.start = start
         this.race = race
+    }
+
+    asJSON = () => {
+        // Convert object refs to IDs
+        return {
+            id: this.id,
+            boatId: this.boat ? this.boat.id : "",
+            helmId: this.helm ? this.helm.id : "",
+            lapTimes: this.lapTimes,
+            finish: this.finish,
+            start: this.start,
+        }
+    }
+
+    static fromJSON(props, store) {
+        // Convert IDs to object refs
+        props.boat = store.boatStore.findBoat(props.boatId)
+        delete props.boatId
+        props.helm = store.peopleStore.findPerson(props.helmId)
+        delete props.helmId
+        // Convert dates
+        props.lapTimes = props.lapTimes.map(lapTime => new Date(lapTime))
+        props.start = props.start ? new Date(props.start) : null
+        props.finish = props.finish ? new Date(props.finish) : null
+        console.log("Loaded start time", props.start)
+        console.log("Loaded finish time", props.finish)
+
+        return new RaceEntry({
+            ...props
+        })
     }
 
     @computed get boatClass() {
@@ -96,12 +126,26 @@ export class Race {
     @observable entries = []
     store = null
 
-    constructor({id = v4uuid(), entries = [], start = null, store = null}) {
+    constructor({id = v4uuid(), entries = [], store = null}) {
         this.id = id
+        this.store = store
         this.entries = entries
         this.entries.forEach(entry => entry.race = this)
-        this.start = start
-        this.store = store
+    }
+
+    asJSON = () => {
+        return {
+            entries: this.entries.map(entry => entry.asJSON())
+        }
+    }
+
+    static fromJSON(props, store) {
+        props.entries = props.entries
+            .map(entry => RaceEntry.fromJSON(entry, store))
+        return new Race({
+            store: store,
+            ...props
+        })
     }
 
     newEntry = (props) => {
@@ -193,12 +237,35 @@ export class Race {
     }
 }
 
-class RacesStore {
+export class RacesStore {
     @observable races = []
     @observable selectedRace = null
+    @observable loaded = false
+    storageImpl
+    peopleStore
+    boatStore
 
-    @computed get racesCount() {
-        return this.races.length
+    constructor(storageImpl, peopleStore, boatStore) {
+        this.storageImpl = storageImpl
+        this.peopleStore = peopleStore
+        this.boatStore = boatStore
+
+        autorun(this.saveData)
+    }
+
+    saveData = async () => {
+        let races = this.races.slice()
+        if (!this.loaded) {
+            return
+        }
+        await this.storageImpl.save(races.map(race => race.asJSON()))
+    }
+
+    loadData = async () => {
+        let jsonArray = await this.storageImpl.getStorageObjects()
+        let races = jsonArray.map(jsonObj => Race.fromJSON(jsonObj, this))
+        this.races.push(...races)
+        this.loaded = true
     }
 
     newRace = (props) => {
@@ -210,6 +277,8 @@ class RacesStore {
     removeRace = (race) => {
         this.races.remove(race)
     }
-}
 
-export default new RacesStore()
+    @computed get racesCount() {
+        return this.races.length
+    }
+}

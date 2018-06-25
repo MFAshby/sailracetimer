@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { createStackNavigator } from 'react-navigation'
 import { Provider } from 'mobx-react'
+import { AppLoading } from 'expo'
 
 import MainScreen from './MainScreen'
 import ClassesScreen from './ClassesScreen'
@@ -13,13 +14,7 @@ import AddPersonScreen from './AddPersonScreen'
 import AddRaceScreen from './AddRaceScreen'
 import RunRaceScreen from './RunRaceScreen'
 import RaceResults from './RaceResults'
-
-import raceStore from './RacesStore'
-import bClassStore from './BoatClassesStore'
-import boatStore from './BoatsStore'
-import peopleStore from './PeopleStore'
-
-import { } from './FakeData'
+import { raceStore, peopleStore, bClassStore, boatStore, loadStores } from './Stores'
 
 const StackNav = createStackNavigator(
   {
@@ -41,7 +36,18 @@ const StackNav = createStackNavigator(
 )
 
 export default class Root extends Component {
+  state = {
+    loading: true
+  }
+
   render() {
+    if (this.state.loading) {
+      return <AppLoading
+        startAsync={ loadStores }
+        onFinish={() => this.setState({loading: false})}
+        onError={alert}/>
+    }
+
     return (<Provider 
         raceStore={raceStore} 
         bClassStore={bClassStore}

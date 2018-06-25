@@ -1,4 +1,4 @@
-import { observable } from "mobx"
+import { observable, autorun } from "mobx"
 import v4uuid from './uuid'
 
 export class BoatClass {
@@ -23,10 +23,53 @@ export class BoatClass {
     delete = () => {
         this.store.removeBoatClass(this)
     }
+
+    get asJSON() {
+        return {
+            id: this.id,
+            name: this.name,
+            pyNumber: this.pyNumber,
+            iconName: this.iconName
+        }
+    }
+
+    static fromJSON(props, store) {
+        return new BoatClass({
+            store: store, 
+            ...props
+        })
+    }
 }
 
-class BoatClassesStore {
+export class BoatClassesStore {
     @observable boatClasses = []
+    storageImpl = null
+
+    constructor(storageImpl = null) {
+        this.storageImpl = storageImpl
+        autorun(this.saveData)
+    }
+
+    saveData = async () => {
+        let boatClasses = this.boatClasses.slice()
+        if (!this.loaded) {
+            return
+        }
+        await this.storageImpl.save(boatClasses.map(boatClass => boatClass.asJSON))
+    }
+
+    loadData = async () => {
+        try {
+            let jsonArray = await this.storageImpl.getStorageObjects()
+            let boatClasses = jsonArray
+                .map(jsonObj => BoatClass.fromJSON(jsonObj, this))
+            this.boatClasses.push(...boatClasses)
+        }
+        catch (err) {
+            console.log(err)
+        }
+        this.loaded = true
+    }
 
     newBoatClass = ({id = v4uuid(), name = "", pyNumber = 1000, iconName = ""}) => {
         let nbc = new BoatClass({store:this, 
@@ -41,6 +84,8 @@ class BoatClassesStore {
     removeBoatClass = boatClass => {
         this.boatClasses.splice(this.boatClasses.indexOf(boatClass), 1)
     }
-}
 
-export default new BoatClassesStore()
+    findBoatClass = (id) => {
+        return this.boatClasses.find(bClass => bClass.id === id)
+    }
+}

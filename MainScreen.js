@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Button, AsyncStorage } from 'react-native'
 import Icon from './Icon.js'
 import { observer, inject } from 'mobx-react'
 
@@ -15,11 +15,17 @@ class MainScreenButton extends PureComponent {
     }
 }
 
+async function clearData() {
+    await AsyncStorage.clear()
+    console.log("Cleared!")
+}
+
 @inject("raceStore", "bClassStore", "boatStore", "peopleStore")
 @observer
 export default class MainScreen extends Component {
     static navigationOptions = {
-        title: "Sail Race Timer"
+        title: "Sail Race Timer",
+        headerRight: <Button title="Clear data" onPress={clearData}/>
     }
 
     render() {

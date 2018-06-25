@@ -1,4 +1,4 @@
-import { observable } from "mobx";
+import { observable, autorun } from "mobx";
 import v4uuid from './uuid'
 
 export class Person {
@@ -6,6 +6,10 @@ export class Person {
     @observable name = ""
     @observable imageUri = null
     store = null
+
+    static fromJSON(obj, store) {
+        return new Person({store: store, ...obj})
+    }
 
     constructor({store = null, id = v4uuid(), name = "", imageUri = null}) {
         this.id = id
@@ -17,10 +21,48 @@ export class Person {
     delete = () => {
         this.store.removePerson(this)
     }
+
+    asJSON = () => {
+        return {
+            id: this.id,
+            name: this.name,
+            imageUri: this.imageUri
+        }
+    }
 }
 
-class PeopleStore {
+const STORAGE_KEY = "net.mfashby.sailracetimer.peoplestore"
+
+export class PeopleStore {
     @observable people = []
+    @observable loaded = false
+    storageImpl = null
+
+    constructor(storageImpl = null) {
+        this.storageImpl = storageImpl
+        autorun(this.saveData)
+    }
+
+    saveData = async () => {
+        let people = this.people.slice()
+        if (!this.loaded) {
+            return
+        }
+        await this.storageImpl.save(people.map(person => person.asJSON()))
+    }
+
+    loadData = async () => {
+        try {
+            let jsonArray = await this.storageImpl.getStorageObjects()
+            let people = jsonArray
+                .map(jsonObj => Person.fromJSON(jsonObj, this))
+            this.people.push(...people)
+        }
+        catch (err) {
+            console.log(err)
+        }
+        this.loaded = true
+    }
 
     newPerson = ({id = v4uuid(), name = "", imageUri = null}) => {
         let newPerson = new Person({
@@ -36,6 +78,8 @@ class PeopleStore {
     removePerson = person => {
         this.people.splice(this.people.indexOf(person), 1)
     }
-}
 
-export default new PeopleStore()
+    findPerson = (id) => {
+        return this.people.find(person => person.id === id)
+    }
+}
