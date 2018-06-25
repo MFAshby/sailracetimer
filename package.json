@@ -28,6 +28,7 @@
     "react-native": "~0.55.2",
     "react-native-autocomplete-input": "^3.5.0",
     "react-navigation": "^2.0.1",
-    "react-navigation-props-mapper": "^0.2.0"
+    "react-navigation-props-mapper": "^0.2.0",
+    "react-navigation-tabs": "^0.5.1"
   }
 }

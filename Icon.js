@@ -19,7 +19,8 @@ export default class Icon extends PureComponent {
     render() {
         let wh = {
             width: this.props.width || 90, 
-            height: this.props.height || 90
+            height: this.props.height || 90,
+            ...this.props
         }
         switch(this.props.name) {
             case "logo": 

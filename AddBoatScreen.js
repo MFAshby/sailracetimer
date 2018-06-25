@@ -47,6 +47,7 @@ export default class AddBoatScreen extends Component {
     render() {
         return <View styles={styles.container}>
             <TextInput 
+                autoFocus
                 style={styles.textInput}
                 keyboardType="numeric"
                 value={this.state.sailNumber}

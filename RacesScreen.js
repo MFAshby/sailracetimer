@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react'
+import React, { Component } from 'react'
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button, Alert } from 'react-native'
 import { inject, observer } from 'mobx-react'
 
