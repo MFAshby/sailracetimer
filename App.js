@@ -5,6 +5,7 @@ import { Provider, observer } from 'mobx-react'
 import { AppLoading } from 'expo'
 
 import Icon from './Icon'
+import { Ionicons } from '@expo/vector-icons'
 import ClassesScreen from './ClassesScreen'
 import PeopleScreen from './PeopleScreen'
 import BoatsScreen from './BoatsScreen'
@@ -16,6 +17,8 @@ import AddRaceScreen from './AddRaceScreen'
 import RunRaceScreen from './RunRaceScreen'
 import RaceResults from './RaceResults'
 import { raceStore, peopleStore, bClassStore, boatStore, loadStores } from './Stores'
+import SettingsScreen from './SettingsScreen'
+import PickerScreen from './PickerScreen'
 
 const ClassesStack = createStackNavigator({
   Home: ClassesScreen,
@@ -37,6 +40,11 @@ const RacesStack = createStackNavigator({
   AddRaceScreen: AddRaceScreen,
   RunRaceScreen: RunRaceScreen,
   RaceResults: RaceResults,
+})
+
+const SettingsStack = createStackNavigator({
+  Home: SettingsScreen,
+  PickerScreen: PickerScreen,
 })
 
 const TabNav = createBottomTabNavigator({
@@ -68,6 +76,13 @@ const TabNav = createBottomTabNavigator({
       tabBarIcon: ({tintColor}) => <Icon name="class" width={32} height={32} tintColor={tintColor}/>
     })
   },  
+  SettingsStack: {
+    screen: SettingsStack,
+    navigationOptions: {
+      title: "Settings",
+      tabBarIcon: ({tintColor}) => <Ionicons name="md-settings" size={32} color={tintColor}/>
+    }
+  }
 }, {
   tabBarComponent: observer(BottomTabBar)
 })

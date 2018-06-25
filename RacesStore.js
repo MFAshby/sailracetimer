@@ -1,4 +1,5 @@
 import moment from 'moment'
+import {} from 'moment-duration-format'
 import _ from 'lodash'
 import { observable, computed, autorun } from 'mobx'
 import v4uuid from './uuid'
@@ -81,10 +82,11 @@ export class RaceEntry {
     }
 
     @computed get elapsedDesc() {
-        if (!this.start) {
+        let elapsed = this.elapsed
+        if (!this.start || elapsed < 0) {
             return "Not started"
         } 
-        return moment.utc(this.elapsed).format(elapsedFormat)
+        return moment.duration(elapsed).format(elapsedFormat)
     }
 
     @computed get elapsedAdjusted() {
@@ -98,7 +100,7 @@ export class RaceEntry {
         if (!this.start) {
             return "Not started"
         }
-        return moment.utc(this.elapsedAdjusted).format(elapsedFormat)
+        return moment.duration(this.elapsedAdjusted).format(elapsedFormat)
     }
 
     @computed get position() {
@@ -192,14 +194,14 @@ export class Race {
         if (!this.start) {
             return "Not started"
         }
-        return moment.utc(this.elapsed).format(elapsedFormat)
+        return moment.duration(this.elapsed).format(elapsedFormat)
     }
 
     @computed get elapsedShort() {
         if (!this.start) {
             return "Not started"
         }
-        return moment.utc(this.elapsed).format(elapsedFormatShort)
+        return moment.duration(this.elapsed).format(elapsedFormatShort)
     }
 
     @computed get finish() {

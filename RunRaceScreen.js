@@ -1,7 +1,8 @@
-import React, { Component, PureComponent } from 'react'
+import React, { Component } from 'react'
 import { View, Text, FlatList, StyleSheet, Button } from 'react-native'
 import { validStartRace, validLapEntry, validFinishEntry } from './Validation'
 import { inject, observer } from 'mobx-react'
+import moment from 'moment'
 
 class Elapsed extends Component {
     componentDidMount() {
@@ -55,12 +56,12 @@ export default class RunRaceScreen extends Component {
 
         // Ensure we access the @observable property race.entries
         let entries = race.entries.slice()
-
+        
         return <View style={ styles.container }>
             <Elapsed elapsedDesc={() => race.elapsedDesc}/>
             <Button 
                 title="Start" 
-                onPress={ () => race.start = new Date() }
+                onPress={ () => race.start = moment().add(6, 'm').toDate() }
                 disabled={ !validStartRace(race) }/>
             <FlatList
                 data={ entries }

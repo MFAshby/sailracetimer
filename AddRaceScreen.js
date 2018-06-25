@@ -45,6 +45,8 @@ export default class AddRaceScreen extends Component {
             boat: this.newEntryBoat
         })
         this.entries.push(raceEntry)
+        this.newEntryBoat = null
+        this.newEntryHelm = null
     }
 
     removeEntry = (entry) => {
