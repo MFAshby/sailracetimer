@@ -25,7 +25,7 @@ async function clearData() {
 export default class MainScreen extends Component {
     static navigationOptions = {
         title: "Sail Race Timer",
-        headerRight: <Button title="Clear data" onPress={clearData}/>
+        // headerRight: <Button title="Clear data" onPress={clearData}/>
     }
 
     render() {
