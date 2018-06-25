@@ -55,9 +55,7 @@ export class RaceEntry {
         props.lapTimes = props.lapTimes.map(lapTime => new Date(lapTime))
         props.start = props.start ? new Date(props.start) : null
         props.finish = props.finish ? new Date(props.finish) : null
-        console.log("Loaded start time", props.start)
-        console.log("Loaded finish time", props.finish)
-
+    
         return new RaceEntry({
             ...props
         })
