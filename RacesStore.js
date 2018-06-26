@@ -15,7 +15,7 @@ export class RaceEntry {
     @observable lapTimes = []
     @observable finish = null
     @observable start = null
-    race = null
+    fleet = null
     
     constructor({id = v4uuid(), 
         boat = null, 
@@ -23,7 +23,7 @@ export class RaceEntry {
         lapTimes = [], 
         finish = null, 
         start = null, 
-        race = null}) {
+        fleet = null}) {
 
         this.id = id
         this.boat = boat
@@ -31,7 +31,7 @@ export class RaceEntry {
         this.lapTimes = lapTimes
         this.finish = finish
         this.start = start
-        this.race = race
+        this.fleet = fleet
     }
 
     asJSON = () => {
@@ -104,7 +104,7 @@ export class RaceEntry {
     }
 
     @computed get position() {
-        let entriesOrdered = this.race.entriesOrdered
+        let entriesOrdered = this.fleet.race.entriesOrdered
         return entriesOrdered.indexOf(this) + 1 // Human indexing
     }
 
@@ -121,31 +121,34 @@ export class RaceEntry {
     }
 }
 
-export class Race {
+/**
+ * Represents a group of boats that start together in a race
+ */
+export class RaceFleet {
     id = null
     @observable entries = []
-    store = null
+    race = null
 
-    constructor({id = v4uuid(), entries = [], store = null}) {
+    constructor({id = v4uuid(), entries = [], race = null}) {
         this.id = id
-        this.store = store
+        this.race = race
         this.entries = entries
-        this.entries.forEach(entry => entry.race = this)
-    }
-
-    asJSON = () => {
-        return {
-            entries: this.entries.map(entry => entry.asJSON())
-        }
+        this.entries.forEach(entry => entry.fleet = this)
     }
 
     static fromJSON(props, store) {
         props.entries = props.entries
             .map(entry => RaceEntry.fromJSON(entry, store))
-        return new Race({
-            store: store,
+        return new RaceFleet({
             ...props
         })
+    }
+
+    asJSON = () => {
+        return {
+            id: this.id,
+            entries: this.entries.map(entry => entry.asJSON())
+        }
     }
 
     newEntry = (props) => {
@@ -157,10 +160,6 @@ export class Race {
         return entry
     }
 
-    delete = () => {
-        this.store.removeRace(this)
-    }
-
     @computed get start() {
         let starts = this.entries.map(entry => entry.start)
         return Math.min(...starts) || null
@@ -168,6 +167,60 @@ export class Race {
 
     set start(val) {
         this.entries.forEach(entry => entry.start = val)
+    }
+}
+
+/**
+ * Represents a single race
+ */
+export class Race {
+    id = null
+    @observable fleets = []
+    store = null
+
+    constructor({id = v4uuid(), fleets = [], store = null}) {
+        this.id = id
+        this.store = store
+        this.fleets = fleets
+        this.fleets.forEach(fleet => fleet.race = this)
+    }
+
+    asJSON = () => {
+        return {
+            fleets: this.fleets.map(fleet => fleet.asJSON())
+        }
+    }
+
+    static fromJSON(props, store) {
+        props.fleets = props.fleets
+            .map(fleet => RaceFleet.fromJSON(fleet, store))
+        return new Race({
+            store: store,
+            ...props
+        })
+    }
+
+    delete = () => {
+        this.store.removeRace(this)
+    }
+
+    newFleet = (props) => {
+        let fleet = new RaceFleet({race: this, ...props})
+        this.fleets.push(fleet)
+        return fleet
+    }
+
+    @computed get entries() {
+        let entries = []
+        this.fleets.forEach(fleet => {
+            entries.push(...fleet.entries)
+        })
+        return entries
+    }
+
+    @computed get start() {
+        let starts = this.entries.map(entry => entry.start)
+        return Math.min(...starts) || null
     }
 
     @computed get startDesc() {

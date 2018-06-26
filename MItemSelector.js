@@ -38,6 +38,7 @@ export default class MItemSelector extends Component {
                     style={styles.autoComplete}
                     editable={!this.props.selectedItem}
                     placeholder={this.props.placeholder}
+                    keyboardType={this.props.keyboardType}
                     data={suggestions}
                     defaultValue={searchBoxText}
                     onChangeText={ text => this.setState({searchText: text}) }

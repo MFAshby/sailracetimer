@@ -35,7 +35,9 @@ export default class AddRaceScreen extends Component {
     }
 
     onPressSave = () => {
-        this.props.raceStore.newRace({ entries: this.entries })
+        let race = this.props.raceStore.newRace()
+        race.newFleet({ entries: this.entries })
+
         this.props.navigation.goBack()
     }
 
@@ -86,7 +88,8 @@ export default class AddRaceScreen extends Component {
                     setSelectedItem={ item => this.newEntryBoat = item }
                     renderItem={ item => <BoatListItem boat={item}/> }
                     itemToString={ item => item.sailNumber}
-                    placeholder="Sail number"/>
+                    placeholder="Sail number"
+                    keyboardType="numeric"/>
                 <MButton
                     style={ styles.addEntryButton }
                     onPress={ this.addRaceEntry }

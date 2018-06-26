@@ -61,7 +61,7 @@ export default class RunRaceScreen extends Component {
             <Elapsed elapsedDesc={() => race.elapsedDesc}/>
             <Button 
                 title="Start" 
-                onPress={ () => race.start = moment().add(6, 'm').toDate() }
+                onPress={ () => race.fleets[0].start = moment().add(6, 'm').toDate() }
                 disabled={ !validStartRace(race) }/>
             <FlatList
                 data={ entries }
